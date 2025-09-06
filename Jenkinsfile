@@ -34,7 +34,7 @@ pipeline {
       steps {
         echo "Running container ${DOCKER_CONTAINER}..."
         sh """
-          docker run -d --name ${DOCKER_CONTAINER} --restart unless-stopped -p 4001:80 ${DOCKER_IMAGE}:latest
+          docker run -d --name ${DOCKER_CONTAINER} --restart unless-stopped -p 3000:80 ${DOCKER_IMAGE}:latest
         """
       }
     }
