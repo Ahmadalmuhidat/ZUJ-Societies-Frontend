@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-// const BASE_URL = 'http://34.29.161.87:4000/';
-const BASE_URL = 'http://localhost:4000/';
+const BASE_URL = 'http://34.29.161.87:4000/';
+// const BASE_URL = 'http://localhost:4000/';
 
 const AxiosClient = axios.create({
   baseURL: BASE_URL,
