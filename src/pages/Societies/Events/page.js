@@ -13,6 +13,7 @@ export default function SocietyEvents() {
   const [searchTerm, setSearchTerm] = useState('');
   const [events, setEvents] = useState([]);
   const { isMember } = useSocietyMembership(id);
+  const [mounted, setMounted] = useState(false);
 
   const getEventsBySociety = async () => {
     const response = await AxiosClient.get("/events/get_events_by_society", {
@@ -31,6 +32,8 @@ export default function SocietyEvents() {
 
   useEffect(() => {
     getEventsBySociety();
+    const idAnim = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(idAnim);
   }, []);
 
   return (
@@ -49,7 +52,7 @@ export default function SocietyEvents() {
         }
       />
 
-      <main className="min-h-screen bg-gray-50 py-8">
+      <main className={`min-h-screen bg-gray-50 py-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="max-w-6xl mx-auto px-4">
 
           {/* Event Stats */}

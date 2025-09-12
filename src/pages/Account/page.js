@@ -5,6 +5,8 @@ import Tabs from "./Components/Tabs";
 
 export default function Account() {
   const [profileData, setProfileData] = useState(null);
+  const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getUserProfileInfo = async () => {
     try {
@@ -19,22 +21,35 @@ export default function Account() {
       }
     } catch (error) {
       console.error("Failed to fetch profile info:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getUserProfileInfo();
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
   }, []);
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <main className={`min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       <div className="max-w-6xl mx-auto">
-        <ProfileHeader profileData={profileData} />
-        <Tabs
-          profileData={profileData}
-          setProfileData={setProfileData}
-          getUserProfileInfo={getUserProfileInfo}
-        />
+        {loading ? (
+          <div className="space-y-6 animate-pulse">
+            <div className="h-24 bg-white rounded-lg shadow-sm"></div>
+            <div className="h-64 bg-white rounded-lg shadow-sm"></div>
+          </div>
+        ) : (
+          <>
+            <ProfileHeader profileData={profileData} />
+            <Tabs
+              profileData={profileData}
+              setProfileData={setProfileData}
+              getUserProfileInfo={getUserProfileInfo}
+            />
+          </>
+        )}
       </div>
     </main>
   );

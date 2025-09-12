@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useEffect, useState } from 'react';
 
 export default function Sidebar() {
   const { isAuthenticated } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       {/* Community Stats */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Community Stats</h3>

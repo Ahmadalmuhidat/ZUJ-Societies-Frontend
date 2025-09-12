@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function EventFilters({ filter, setFilter }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   return (
-    <div className="flex flex-wrap gap-4 mb-8 justify-end">
+    <div className={`flex flex-wrap gap-4 mb-8 justify-end transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       <div className="relative">
         <select 
           className="appearance-none bg-white border border-gray-200 rounded-full py-2 pl-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"

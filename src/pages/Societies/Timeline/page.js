@@ -12,6 +12,7 @@ export default function SocietyDetail() {
   const [newPostContent, setNewPostContent] = useState('');
   const [newPostImage, setNewPostImage] = useState('');
   const [posts, setPosts] = useState([]);
+  const [mounted, setMounted] = useState(false);
 
   const getPostsBySociety = async () => {
     try {
@@ -51,6 +52,8 @@ export default function SocietyDetail() {
 
   useEffect(() => {
     getPostsBySociety();
+    const idAnim = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(idAnim);
   }, [id]);
 
   return (
@@ -78,7 +81,7 @@ export default function SocietyDetail() {
         }
       />
 
-      <main className="min-h-screen bg-gray-50">
+      <main className={`min-h-screen bg-gray-50 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <Timeline id={id} posts={posts} getPostsBySociety={getPostsBySociety} />

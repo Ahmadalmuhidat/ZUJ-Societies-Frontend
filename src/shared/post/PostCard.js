@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import AxiosClient from '../../config/axios';
 import { useAuth } from '../../context/AuthContext';
 import CommentList from './CommentList';
@@ -12,6 +13,9 @@ export default function PostCard({ post }) {
   const [reportMessage, setReportMessage] = useState('');
   const [isLiked, setIsLiked] = useState(post.Is_Liked);
   const [likesCount, setLikesCount] = useState(post.Likes);
+  const [mounted, setMounted] = useState(false);
+  const [loadingComments, setLoadingComments] = useState(false);
+  const defaultImage = 'https://img.freepik.com/free-vector/multicultural-people-standing-together_74855-6583.jpg';
 
   const handleLike = async () => {
     const prevIsLiked = isLiked;
@@ -79,6 +83,7 @@ export default function PostCard({ post }) {
 
   const getComments = async () => {
     try {
+      setLoadingComments(true);
       const response = await AxiosClient.get('/comment/get_comments_by_post', {
         params: {
           token: localStorage.getItem('token') || sessionStorage.getItem('token') || '',
@@ -88,6 +93,8 @@ export default function PostCard({ post }) {
       if (response.status === 200) setComments(response.data.data);
     } catch (err) {
       console.error('Failed to fetch comments:', err);
+    } finally {
+      setLoadingComments(false);
     }
   };
 
@@ -99,7 +106,7 @@ export default function PostCard({ post }) {
   const closeReportModal = () => setShowReportModal(false);
 
   const submitReport = async () => {
-    if (!reportMessage.trim()) return alert('Please enter a report message.');
+    if (!reportMessage.trim()) return toast.info('Please enter a report message.');
     try {
       const response = await AxiosClient.post('/report/report_post', {
         post_id: post.ID,
@@ -107,16 +114,19 @@ export default function PostCard({ post }) {
         message: reportMessage,
       });
 
-      alert(response.status === 200 ? 'Post reported successfully.' : 'Failed to report post.');
+      if (response.status === 200) toast.success('Post reported successfully.');
+      else toast.error('Failed to report post.');
     } catch (err) {
       console.error(err);
-      alert('An error occurred while reporting the post.');
+      toast.error('An error occurred while reporting the post.');
     }
     setShowReportModal(false);
   };
 
   useEffect(() => {
     getComments();
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
   }, []);
 
   return (
@@ -151,7 +161,7 @@ export default function PostCard({ post }) {
       )}
 
       {/* Post Card */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 max-w-2xl mx-auto">
+      <div className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 max-w-2xl mx-auto transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="p-4">
           {/* User Info */}
           <div className="flex items-center gap-3 mb-4">
@@ -169,7 +179,16 @@ export default function PostCard({ post }) {
           {/* Image */}
           {post.Image && (
             <div className="rounded-md overflow-hidden mb-4">
-              <img src={post.Image} alt="Post" className="w-full h-64 object-cover" />
+              <img
+                src={post.Image || defaultImage}
+                alt="Post"
+                className="w-full h-64 object-cover transition-transform duration-500 hover:scale-[1.01]"
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = defaultImage;
+                }}
+              />
             </div>
           )}
 
@@ -204,7 +223,21 @@ export default function PostCard({ post }) {
           {/* Comments */}
           {showComments && (
             <div className="border-t pt-4">
-              <CommentList comments={comments} postId={post.ID} />
+              {loadingComments ? (
+                <div className="space-y-3 animate-pulse">
+                  {[...Array(2)].map((_, i) => (
+                    <div key={i} className="flex">
+                      <div className="h-8 w-8 rounded-full bg-gray-200 mr-2"></div>
+                      <div className="flex-1">
+                        <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <CommentList comments={comments} postId={post.ID} />
+              )}
               {isAuthenticated && (
                 <form onSubmit={handleAddComment} className="mt-4 flex">
                   <input

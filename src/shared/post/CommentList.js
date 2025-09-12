@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function CommentList({ comments }) {
   const [visibleCount, setVisibleCount] = useState(1);
+  const [mounted, setMounted] = useState(false);
 
   const handleViewMore = () => setVisibleCount((prev) => prev + 3);
 
   const displayedComments = comments.slice(0, visibleCount);
   const hasMore = visibleCount < comments.length;
 
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   return (
-    <div className="space-y-4">
+    <div className={`space-y-4 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       {displayedComments.map((comment) => (
         <div key={comment.id} className="flex">
           <div className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0">

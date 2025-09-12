@@ -11,10 +11,11 @@ export default function SocietyJoinRequests() {
   const [requests, setRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [filter, setFilter] = useState('pending');
+  const [mounted, setMounted] = useState(false);
 
   const getAllJoinRequests = async () => {
     try {
-      const response = await AxiosClient.get("/societies/get_all_join_requests", {
+      const response = await AxiosClient.get("/societies/join_requests/get_all", {
         params: {
           society_id: id
         }
@@ -57,12 +58,14 @@ export default function SocietyJoinRequests() {
 
   useEffect(() => {
     getAllJoinRequests();
+    const idAnim = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(idAnim);
   }, []);
 
   return (
     <>
       <SocietyHeader societyId={id || '1'} />
-      <main className="min-h-screen bg-gray-50 py-8">
+      <main className={`min-h-screen bg-gray-50 py-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="max-w-6xl mx-auto px-4">
           <StatsCards requests={requests} />
 

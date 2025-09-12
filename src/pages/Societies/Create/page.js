@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NewSocietyForm from './Components/NewSocietyForm';
 
 export default function NewSociety() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
   return (
     <>
-      <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <main className={`min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">

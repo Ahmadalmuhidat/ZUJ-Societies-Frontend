@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function EventCard(event) {
   const navigate = useNavigate();
+  const defaultImage = 'https://img.freepik.com/free-vector/multicultural-people-standing-together_74855-6583.jpg';
 
   const formattedDate = new Date(event.Date).toLocaleDateString(undefined, {
     day: 'numeric',
@@ -21,9 +22,13 @@ export default function EventCard(event) {
     >
       <div className="relative h-48 w-full overflow-hidden">
         <img 
-          src={event.Image}
+          src={event.Image || defaultImage}
           alt={event.Title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = defaultImage;
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
@@ -35,7 +40,7 @@ export default function EventCard(event) {
         </div>
 
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-indigo-700 transition duration-300">{event.Title}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-indigo-700 transition-colors duration-300">{event.Title}</h3>
           <p className="text-sm text-gray-600 mt-1">{event.Description}</p>
           <div className="text-xs text-gray-500 mt-2">
             📍 {event.Location} &nbsp;|&nbsp; 🏷️ {event.Category}

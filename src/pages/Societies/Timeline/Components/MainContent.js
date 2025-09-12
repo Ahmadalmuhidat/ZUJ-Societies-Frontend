@@ -1,7 +1,7 @@
 // src/pages/SocietyDetails/Components/MainContent.jsx
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import PostCard from '../../../../SharedComponents/post/PostCard';
+import PostCard from '../../../../shared/post/PostCard';
 import EventCard from '../../../Events/Components/EventCard';
 import AxiosClient from '../../../../config/axios';
 

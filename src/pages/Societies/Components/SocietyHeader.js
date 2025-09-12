@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SocietyNav from './SocietyNav';
 import { useAuth } from '../../../context/AuthContext';
 import AxiosClient from '../../../config/axios';
 
+// Simple in-memory caches to persist across tab switches within the session
+const societyDetailsCache = new Map(); // key: societyId -> details object
+const joinStatusCache = new Map(); // key: societyId -> boolean
+
 export default function SocietyHeader({ societyId, showJoinButton = false, actionButton }) {
-  const [details, setDetails] = useState({});
+  const cacheDetails = societyDetailsCache.get(societyId);
+  const cacheJoin = joinStatusCache.get(societyId);
+  const [details, setDetails] = useState(cacheDetails || {});
   const { isAuthenticated } = useAuth();
-  const [joinRequested, setJoinRequested] = useState(false);
+  const [joinRequested, setJoinRequested] = useState(Boolean(cacheJoin));
+  const [mounted, setMounted] = useState(Boolean(cacheDetails));
+  const fetchedRef = useRef(false);
 
   const getSocietyDetails = async () => {
     try {
@@ -14,7 +22,28 @@ export default function SocietyHeader({ societyId, showJoinButton = false, actio
         params: { society_id: societyId },
       });
       if (response.status === 200) {
+        societyDetailsCache.set(societyId, response.data.data);
         setDetails(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching society details:', error);
+    }
+  };
+
+  const checkJoinRequest = async () => {
+    try {
+      const response = await AxiosClient.get('/societies/join_requests/check', {
+        params: {
+          token: localStorage.getItem("token") || sessionStorage.getItem("token"),
+          society_id: societyId
+        },
+      });
+
+      if (response.status === 200) {
+        if (response.data.data == "pending") {
+          joinStatusCache.set(societyId, true);
+          setJoinRequested(true);
+        }
       }
     } catch (error) {
       console.error('Error fetching society details:', error);
@@ -31,6 +60,7 @@ export default function SocietyHeader({ societyId, showJoinButton = false, actio
       });
 
       if (response.status === 200) {
+        joinStatusCache.set(societyId, true);
         setJoinRequested(true);
       }
     } catch (err) {
@@ -39,13 +69,22 @@ export default function SocietyHeader({ societyId, showJoinButton = false, actio
   };
 
   useEffect(() => {
-    getSocietyDetails();
-  }, []);
+    // Avoid duplicate fetches if already fetched for this societyId
+    if (!cacheDetails && !fetchedRef.current) {
+      fetchedRef.current = true;
+      getSocietyDetails();
+    }
+    if (isAuthenticated && cacheJoin !== true) {
+      checkJoinRequest();
+    }
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, [societyId, isAuthenticated]);
 
   return (
     <>
       {/* Cover Section */}
-      <div className="relative h-64 bg-gradient-to-r from-blue-600 to-purple-600">
+      <div className={`relative h-64 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="absolute inset-0 bg-black bg-opacity-30" />
         <div className="relative max-w-6xl mx-auto px-4 h-full flex items-end pb-6">
           <div className="flex items-end space-x-6">

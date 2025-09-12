@@ -3,6 +3,7 @@ import AxiosClient from "../../../../config/axios";
 import ChangeRole from "../Modals/ChangeRole";
 import Search from "./Search";
 import { useAuth } from '../../../../context/AuthContext';
+import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 export default function MembersList({ id, members, setMembers }) {
@@ -117,7 +118,13 @@ export default function MembersList({ id, members, setMembers }) {
                   </span>
 
                   <div className="flex space-x-2">
-                    <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">View Profile</button>
+                    <Link
+                      to={`/users/${member.ID}`}
+                      className="inline-flex items-center px-3 py-1.5 border border-blue-200 text-blue-700 bg-blue-50 rounded-md hover:bg-blue-100 hover:border-blue-300 transition-colors text-sm"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a5 5 0 100 10A5 5 0 0010 2z"/><path fillRule="evenodd" d="M.458 17.042A9.956 9.956 0 0110 12c3.042 0 5.79 1.356 7.542 3.542A1 1 0 0116.8 17H3.2a1 1 0 01-.742-1.958z" clipRule="evenodd"/></svg>
+                      View Profile
+                    </Link>
                     {member.Role !== 'admin' && isAuthenticated && (
                       <>
                         <button

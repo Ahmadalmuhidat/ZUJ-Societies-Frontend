@@ -8,7 +8,7 @@ export default function RequestDetails({ setRequests, selectedRequest, setSelect
       req.Request_ID === requestId ? { ...req, Status: 'approved' } : req
     ));
 
-    const response = await AxiosClient.post("/societies/approve_request", {
+    const response = await AxiosClient.post("societies/join_requests/approve", {
       request_id: requestId
     });
 
@@ -22,7 +22,7 @@ export default function RequestDetails({ setRequests, selectedRequest, setSelect
       req.Request_ID === requestId ? { ...req, Status: 'rejected' } : req
     ));
 
-    const response = await AxiosClient.post("/societies/reject_request", {
+    const response = await AxiosClient.post("/societies/join_requests/reject", {
       request_id: requestId
     });
 

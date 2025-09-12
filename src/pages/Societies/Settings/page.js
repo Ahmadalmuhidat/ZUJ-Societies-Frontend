@@ -39,6 +39,7 @@ export default function SocietySettings() {
     }
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const handleSaveChanges = async () => {
     const loadingToastId = toast.loading(`Updating society information...`);
@@ -170,12 +171,14 @@ export default function SocietySettings() {
 
   useEffect(() => {
     getSocietyDetails();
+    const idAnim = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(idAnim);
   }, []);
 
   return (
     <>
       <SocietyHeader societyId={id || '1'} />
-      <main className="min-h-screen bg-gray-50 py-8">
+      <main className={`min-h-screen bg-gray-50 py-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Settings Navigation */}
