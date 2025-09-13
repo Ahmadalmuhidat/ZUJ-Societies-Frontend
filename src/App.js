@@ -16,6 +16,8 @@ import Account from './pages/Account/page';
 import PublicProfile from './pages/Account/PublicProfile/page';
 import Events from './pages/Events/page';
 import Support from './pages/Support/page';
+import Terms from './pages/Terms/page';
+import Privacy from './pages/Privacy/page';
 import MySocieties from './pages/Account/MySocieties/page';
 import Societies from './pages/Societies/page';
 import SocietyDetail from './pages/Societies/Timeline/page';
@@ -26,7 +28,7 @@ import SocietySettings from './pages/Societies/Settings/page';
 import NewSociety from './pages/Societies/Create/page';
 import NewEvent from './pages/Events/NewEvent/page';
 import EventDetailsPage from './pages/Events/Details/page';
-import Header from './shared/layout/Header';
+import Sidebar from './shared/layout/Sidebar';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
 
           {/* Protected Routes */}
           <Route
@@ -43,25 +47,29 @@ function App() {
             element={
               <PrivateRoute>
                 <MembershipProvider>
-                  <Header />
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/account" element={<Account />} />
-                    <Route path="/users/:id" element={<PublicProfile />} />
-                    <Route path="/events" element={<Events />} />
-                    <Route path="/events/:id" element={<EventDetailsPage />} />
-                    <Route path="/support" element={<Support />} />
-                    <Route path="/my-societies" element={<MySocieties />} />
-                    <Route path="/societies" element={<Societies />} />
-                    <Route path="/societies/new" element={<NewSociety />} />
-                    <Route path="/societies/:id" element={<SocietyDetail />} />
-                    <Route path="/societies/:id/events" element={<SocietyEvents />} />
-                    <Route path="/societies/:id/events/new" element={<NewEvent />} />
-                    <Route path="/societies/:id/members" element={<SocietyMembers />} />
-                    <Route path="/societies/:id/join-requests" element={<SocietyJoinRequests />} />
-                    <Route path="/societies/:id/settings" element={<SocietySettings />} />
-                  </Routes>
+                  <div className="flex h-screen bg-gray-50">
+                    <Sidebar />
+                    <main className="flex-1 overflow-auto lg:ml-0">
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/account" element={<Account />} />
+                        <Route path="/users/:id" element={<PublicProfile />} />
+                        <Route path="/events" element={<Events />} />
+                        <Route path="/events/:id" element={<EventDetailsPage />} />
+                        <Route path="/support" element={<Support />} />
+                        <Route path="/my-societies" element={<MySocieties />} />
+                        <Route path="/societies" element={<Societies />} />
+                        <Route path="/societies/new" element={<NewSociety />} />
+                        <Route path="/societies/:id" element={<SocietyDetail />} />
+                        <Route path="/societies/:id/events" element={<SocietyEvents />} />
+                        <Route path="/societies/:id/events/new" element={<NewEvent />} />
+                        <Route path="/societies/:id/members" element={<SocietyMembers />} />
+                        <Route path="/societies/:id/join-requests" element={<SocietyJoinRequests />} />
+                        <Route path="/societies/:id/settings" element={<SocietySettings />} />
+                      </Routes>
+                    </main>
+                  </div>
                 </MembershipProvider>
               </PrivateRoute>
             }

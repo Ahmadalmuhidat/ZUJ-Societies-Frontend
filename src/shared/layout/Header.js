@@ -54,12 +54,12 @@ export default function Header() {
   ];
 
   return (
-    <header className={`relative z-50 bg-white py-4 border-b shadow-sm font-inter transform transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
-      <div className="container mx-auto px-4 flex items-center justify-between gap-6">
+    <header className={`relative z-50 bg-white py-3 border-b shadow-sm font-inter transform transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
+      <div className="container mx-auto px-4 flex items-center justify-between gap-4">
         {/* Left: Logo + Nav */}
         <div className="flex items-center gap-4 sm:gap-8 flex-shrink-0">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl font-extrabold text-gray-900">Society</span>
+            <span className="text-xl font-extrabold text-gray-900">ZUJ Societies</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-6">
@@ -134,10 +134,10 @@ export default function Header() {
       {/* Mobile nav panel */}
       {mobileNavOpen && (
         <div className="md:hidden border-t">
-          <div className="container mx-auto px-4 py-3 space-y-3">
+          <div className="container mx-auto px-4 py-2 space-y-2">
             <form onSubmit={handleSearch} className="flex">
-              <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-r hover:bg-blue-700">Go</button>
+              <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="flex-1 px-3 py-3 text-sm border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              <button type="submit" className="px-4 py-3 bg-blue-600 text-white rounded-r hover:bg-blue-700 text-sm">Go</button>
             </form>
             <nav className="flex flex-col">
               {navItems.map(({ name, path }) => (

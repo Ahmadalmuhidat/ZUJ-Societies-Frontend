@@ -2,13 +2,18 @@ import HomeContainer from './Components/HomeContainer';
 import { useAuth } from '../../context/AuthContext';
 import Sidebar from './Components/Sidebar';
 import WelcomeBack from './Components/WelcomeBack';
+import ActivityFeed from '../../shared/components/ActivityFeed';
+import TrendingPosts from '../../shared/components/TrendingPosts';
+import NotificationCenter from '../../shared/components/NotificationCenter';
+import PersonalizedRecommendations from '../../shared/components/PersonalizedRecommendations';
+import QuickPostCreator from '../../shared/components/QuickPostCreator';
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <main className="min-h-screen bg-gray-50 py-6 sm:py-8 lg:py-10">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 lg:py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
           {/* Main Content - Posts Feed */}
           <div className="lg:col-span-2">
@@ -22,12 +27,21 @@ export default function Home() {
             ) : null}
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1 lg:sticky lg:top-8 h-fit">
+          {/* Right Sidebar */}
+          <div className="lg:col-span-1 lg:sticky lg:top-8 h-fit space-y-6">
             <Sidebar />
+            {isAuthenticated && (
+              <>
+                <QuickPostCreator />
+                <ActivityFeed />
+                <TrendingPosts />
+                <NotificationCenter />
+                <PersonalizedRecommendations />
+              </>
+            )}
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../../context/AuthContext';
+import { useSocietyMembership } from '../../../../context/MembershipContext';
 import { Link } from 'react-router-dom';
+import AxiosClient from '../../../../config/axios';
+import { toast } from 'react-toastify';
+import DeleteConfirmationModal from '../../../../shared/components/DeleteConfirmationModal';
 
-export default function EventsList({ id, events, isEventCompleted, searchTerm, isMember }) {
-  const { isAuthenticated } = useAuth();
+export default function EventsList({ id, events, isEventCompleted, searchTerm, isMember, onEventDeleted }) {
+  const { isAuthenticated, user } = useAuth();
+  const { isAdmin } = useSocietyMembership(id);
   const [filter, setFilter] = useState('upcoming');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -52,6 +60,49 @@ export default function EventsList({ id, events, isEventCompleted, searchTerm, i
       return new Date(b.Date).getTime() - new Date(a.Date).getTime();
     });
 
+  // Check if user can delete an event
+  const canDeleteEvent = (event) => {
+    if (!isAuthenticated || !user) return false;
+    return event.User === user.ID || isAdmin;
+  };
+
+  const handleDeleteClick = (event, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEventToDelete(event);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!eventToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      
+      const response = await AxiosClient.delete("/events/delete_event", {
+        params: { 
+          event_id: eventToDelete.ID,
+          token: token
+        }
+      });
+
+      if (response.status === 200) {
+        toast.success("Event deleted successfully");
+        setShowDeleteModal(false);
+        setEventToDelete(null);
+        if (onEventDeleted) {
+          onEventDeleted(eventToDelete.ID);
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      toast.error(error.response?.data?.error_message || "Failed to delete event");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <>
       <div className="space-y-6">
@@ -68,13 +119,26 @@ export default function EventsList({ id, events, isEventCompleted, searchTerm, i
               </div>
               <div className="md:w-2/3 p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">{event.Title}</h3>
                     <p className="text-gray-600 mb-3">{event.Description}</p>
                   </div>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusBadge(isEventCompleted(event))}`}>
-                    {isEventCompleted(event)}
-                  </span>
+                  <div className="flex items-center gap-2 ml-4">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusBadge(isEventCompleted(event))}`}>
+                      {isEventCompleted(event)}
+                    </span>
+                    {canDeleteEvent(event) && (
+                      <button
+                        onClick={(e) => handleDeleteClick(event, e)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete event"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -139,6 +203,20 @@ export default function EventsList({ id, events, isEventCompleted, searchTerm, i
           )}
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setEventToDelete(null);
+        }}
+        onConfirm={handleDeleteEvent}
+        title="Delete Event"
+        message={`Are you sure you want to delete "${eventToDelete?.Title}"? This action cannot be undone.`}
+        confirmText="Delete Event"
+        isLoading={isDeleting}
+      />
     </>
   );
 }

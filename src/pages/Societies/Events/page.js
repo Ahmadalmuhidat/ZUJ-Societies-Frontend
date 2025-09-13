@@ -5,6 +5,7 @@ import AxiosClient from '../../../config/axios';
 import { useSocietyMembership } from '../../../context/MembershipContext';
 import EventsList from './Components/EventsList';
 import EventStats from './Components/EventStats';
+import { getEventStatus } from '../../../utils/dateUtils';
 // import Search from '../Search/Search';
 
 export default function SocietyEvents() {
@@ -25,9 +26,12 @@ export default function SocietyEvents() {
     }
   };
 
+  const handleEventDeleted = (deletedEventId) => {
+    setEvents(prevEvents => prevEvents.filter(event => event.ID !== deletedEventId));
+  };
+
   const isEventCompleted = (event) => {
-    const eventDateTime = new Date(`${event.Date}T${event.Time}`);
-    return new Date() > eventDateTime ? 'completed' : 'upcoming';
+    return getEventStatus(event);
   };
 
   useEffect(() => {
@@ -68,6 +72,7 @@ export default function SocietyEvents() {
             searchTerm={searchTerm}
             isMember={isMember}
             isEventCompleted={isEventCompleted}
+            onEventDeleted={handleEventDeleted}
           />
         </div>
       </main>

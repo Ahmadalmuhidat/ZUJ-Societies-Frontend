@@ -8,6 +8,10 @@ export default function HomeContainer() {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
+  const handlePostDeleted = (deletedPostId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.ID !== deletedPostId));
+  };
+
   const getPosts = async () => {
     try {
       setLoading(true);
@@ -60,7 +64,7 @@ export default function HomeContainer() {
       {posts.length === 0 ? (
         <p className="text-center text-gray-500 py-8">No posts available.</p>
       ) : (
-        posts.map((post) => <PostCard key={post.ID} post={post} />)
+        posts.map((post) => <PostCard key={post.ID} post={post} onPostDeleted={handlePostDeleted} />)
       )}
     </div>
   );
