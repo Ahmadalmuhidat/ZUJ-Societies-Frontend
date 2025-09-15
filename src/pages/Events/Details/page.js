@@ -273,7 +273,7 @@ export default function EventDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         {/* Hero Section Skeleton */}
         <div className="relative">
           <div className="w-full h-64 sm:h-80 lg:h-96 bg-gray-200 animate-pulse"></div>
@@ -311,17 +311,17 @@ export default function EventDetailsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
               {/* Event Details Card Skeleton */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <div className="h-8 bg-gray-200 rounded w-48 mb-6 animate-pulse"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-6">
+                <div className="h-6 bg-gray-200 rounded w-48 mb-6 animate-pulse"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div className="p-3 bg-gray-100 rounded-lg">
-                        <div className="w-6 h-6 bg-gray-300 rounded animate-pulse"></div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="h-4 bg-gray-200 rounded w-24 mb-2 animate-pulse"></div>
-                        <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+                    <div key={i} className="p-4 bg-gray-100 rounded-xl animate-pulse">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-gray-200 rounded-xl"></div>
+                        <div className="flex-1">
+                          <div className="h-4 bg-gray-200 rounded w-20 mb-2"></div>
+                          <div className="h-3 bg-gray-200 rounded w-28"></div>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -329,8 +329,8 @@ export default function EventDetailsPage() {
               </div>
 
               {/* Description Skeleton */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <div className="h-8 bg-gray-200 rounded w-40 mb-4 animate-pulse"></div>
+              <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-6">
+                <div className="h-6 bg-gray-200 rounded w-40 mb-4 animate-pulse"></div>
                 <div className="space-y-3">
                   <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
                   <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
@@ -340,11 +340,11 @@ export default function EventDetailsPage() {
             </div>
 
             {/* Sidebar Skeleton */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div key={i} className="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
                   <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
-            <div className="space-y-3">
+                  <div className="space-y-3">
                     <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
                     <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse"></div>
@@ -404,7 +404,7 @@ export default function EventDetailsPage() {
   };
 
   return (
-    <div className={`min-h-screen bg-gray-50 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+    <div className={`min-h-screen transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       {/* Hero Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10"></div>
@@ -495,82 +495,99 @@ export default function EventDetailsPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Event Details Card */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
                 Event Details
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-blue-100 rounded-lg">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Date & Time</h3>
-                    <p className="text-gray-600">{formattedDate}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-green-100 rounded-lg">
-                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-            <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Location</h3>
-                    <p className="text-gray-600">{event.Location}</p>
-                    <a 
-                      href={mapUrl} 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1 mt-1"
-                    >
-                      Get Directions
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                    </a>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 mb-1 text-sm">Date & Time</h3>
+                      <p className="text-gray-700 text-sm">{formattedDate}</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-purple-100 rounded-lg">
-                    <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                    </svg>
-            </div>
-            <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Category</h3>
-                    <p className="text-gray-600">{event.Category}</p>
+                <div className="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border border-green-200 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 mb-1 text-sm">Location</h3>
+                      <p className="text-gray-700 text-sm mb-2">{event.Location}</p>
+                      <a 
+                        href={mapUrl} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="text-green-600 hover:text-green-800 text-xs font-medium inline-flex items-center gap-1"
+                      >
+                        Get Directions
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-orange-100 rounded-lg">
-                    <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-            </div>
-            <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Organizer</h3>
-                    <p className="text-gray-600">{event.Organizer || 'ZUJ Societies'}</p>
+                <div className="p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-200 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 mb-1 text-sm">Category</h3>
+                      <p className="text-gray-700 text-sm">{event.Category}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl border border-orange-200 hover:shadow-md transition-all duration-300">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 mb-1 text-sm">Organizer</h3>
+                      <p className="text-gray-700 text-sm">{event.Organizer || 'ZUJ Societies'}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Description */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">About this Event</h2>
+            <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                About this Event
+              </h2>
               <div className="prose prose-gray max-w-none">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line text-lg">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line text-base">
                   {event.Description}
                 </p>
               </div>
@@ -578,26 +595,33 @@ export default function EventDetailsPage() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Action Buttons */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Event Actions</h3>
+            <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                Event Actions
+              </h3>
               <div className="space-y-3">
                 {isAuthenticated ? (
                   <>
                     <button 
                       onClick={toggleAttendance}
-                      className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
+                      className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200 ${
                         isAttending
-                          ? 'bg-green-600 text-white hover:bg-green-700'
-                          : 'bg-blue-600 text-white hover:bg-blue-700'
+                          ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg'
+                          : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg'
                       }`}
                     >
                       {isAttending ? '✓ Attending' : 'Attend Event'}
                     </button>
                     <button 
                       onClick={() => setShowShareModal(true)}
-                      className="w-full py-3 px-4 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium transition-all duration-200"
+                      className="w-full py-3 px-4 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold transition-all duration-200"
                     >
                       Share Event
                     </button>
@@ -605,7 +629,7 @@ export default function EventDetailsPage() {
                 ) : (
                   <Link
                     to="/login"
-                    className="block w-full py-3 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium text-center transition-all duration-200"
+                    className="block w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-semibold text-center transition-all duration-200 shadow-lg"
                   >
                     Login to Attend
                   </Link>
@@ -614,38 +638,52 @@ export default function EventDetailsPage() {
             </div>
 
             {/* Event Stats */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Event Stats</h3>
+            <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                Event Stats
+              </h3>
               {loadingStats ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
-                    <div key={i} className="flex items-center justify-between">
+                    <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
                       <div className="h-4 bg-gray-200 rounded w-8 animate-pulse"></div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Attendees</span>
-                    <span className="font-semibold text-gray-900">{eventStats.attendees}</span>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
+                    <span className="text-gray-700 font-medium text-sm">Attendees</span>
+                    <span className="font-bold text-gray-900 text-lg">{eventStats.attendees}</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Interested</span>
-                    <span className="font-semibold text-gray-900">{eventStats.interested}</span>
+                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg border border-green-200">
+                    <span className="text-gray-700 font-medium text-sm">Interested</span>
+                    <span className="font-bold text-gray-900 text-lg">{eventStats.interested}</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Shares</span>
-                    <span className="font-semibold text-gray-900">{eventStats.shares}</span>
+                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg border border-purple-200">
+                    <span className="text-gray-700 font-medium text-sm">Shares</span>
+                    <span className="font-bold text-gray-900 text-lg">{eventStats.shares}</span>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Related Events */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Related Events</h3>
+            <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="w-6 h-6 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-3 h-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                Related Events
+              </h3>
               {loadingRelated ? (
                 <div className="space-y-3">
                   {[...Array(2)].map((_, i) => (
@@ -670,16 +708,16 @@ export default function EventDetailsPage() {
                       <Link
                         key={relatedEvent.ID}
                         to={`/events/${relatedEvent.ID}`}
-                        className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                        className="block p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg hover:from-orange-50 hover:to-orange-100 transition-all duration-300 border border-gray-200 hover:border-orange-200 group"
                       >
-                        <h4 className="font-medium text-gray-900 text-sm mb-1 line-clamp-1">
+                        <h4 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-orange-700 transition-colors">
                           {relatedEvent.Title}
                         </h4>
-                        <p className="text-xs text-gray-600">
+                        <p className="text-xs text-gray-600 font-medium">
                           {formattedDate} • {formattedTime}
                         </p>
                         {relatedEvent.Category && (
-                          <span className="inline-block mt-1 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                          <span className="inline-block mt-2 px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-lg font-medium">
                             {relatedEvent.Category}
                           </span>
                         )}
@@ -688,8 +726,13 @@ export default function EventDetailsPage() {
                   })}
                 </div>
               ) : (
-                <div className="text-center py-4">
-                  <p className="text-sm text-gray-500">No related events found</p>
+                <div className="text-center py-6">
+                  <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-500 font-medium">No related events found</p>
                 </div>
               )}
             </div>
@@ -699,15 +742,22 @@ export default function EventDetailsPage() {
 
       {/* Share Modal */}
       {showShareModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Share Event</h3>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                  </svg>
+                </div>
+                Share Event
+              </h3>
               <button 
                 onClick={() => setShowShareModal(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -716,7 +766,7 @@ export default function EventDetailsPage() {
             <div className="space-y-3">
               <button 
                 onClick={handleShare}
-                className="w-full py-3 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium transition-all duration-200"
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 font-semibold transition-all duration-200 shadow-lg"
               >
                 Share via Native Share
               </button>
@@ -727,7 +777,7 @@ export default function EventDetailsPage() {
                   toast.success('Link copied to clipboard!');
                   setShowShareModal(false);
                 }}
-                className="w-full py-3 px-4 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium transition-all duration-200"
+                className="w-full py-3 px-4 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold transition-all duration-200"
               >
                 Copy Link
               </button>

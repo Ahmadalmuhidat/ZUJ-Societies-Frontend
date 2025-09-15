@@ -35,7 +35,7 @@ export default function SocietyMembers() {
   return (
     <>
       <SocietyHeader societyId={id || '1'} />
-      <main className={`min-h-screen bg-gray-50 py-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+      <main className={`min-h-screen py-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="max-w-6xl mx-auto px-4">
           <MembersStats members={members} />
           <MembersList id={id} members={members} setMembers={setMembers} />

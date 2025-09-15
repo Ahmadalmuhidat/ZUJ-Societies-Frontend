@@ -92,25 +92,25 @@ export default function SocietyInsights({ societies = [] }) {
   };
 
   const StatCard = ({ title, value, icon, color = 'blue' }) => (
-    <div className="bg-white rounded-lg shadow-sm p-3">
+    <div className="bg-white rounded-2xl shadow-card p-4 border border-gray-100 hover:shadow-lg transition-all duration-300">
       <div className="flex items-center">
-        <div className={`p-2 rounded-lg bg-${color}-100`}>
-          <svg className={`w-4 h-4 text-${color}-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className={`p-3 rounded-xl bg-${color}-100`}>
+          <svg className={`w-5 h-5 text-${color}-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
           </svg>
         </div>
-        <div className="ml-3">
-          <p className="text-xs font-medium text-gray-600">{title}</p>
-          <p className="text-lg font-semibold text-gray-900">{value}</p>
+        <div className="ml-4">
+          <p className="text-sm font-medium text-gray-600">{title}</p>
+          <p className="text-xl font-bold text-gray-900">{value}</p>
         </div>
       </div>
     </div>
   );
 
   const SocietyList = ({ title, societies, emptyMessage, maxItems = 3 }) => (
-    <div className="bg-white rounded-lg shadow-sm p-3 mb-4">
-      <h3 className="text-sm font-semibold text-gray-800 mb-2">{title}</h3>
-      <div className="space-y-2">
+    <div className="bg-white rounded-2xl shadow-card p-6 mb-6 border border-gray-100">
+      <h3 className="text-lg font-bold text-gray-900 mb-4">{title}</h3>
+      <div className="space-y-3">
         {societies.length > 0 ? (
           societies.slice(0, maxItems).map((society, index) => (
             <div key={society.ID} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">

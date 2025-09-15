@@ -99,26 +99,25 @@ export default function EventCalendar({ events = [] }) {
   const days = getDaysInMonth(currentDate);
 
   return (
-    <div className={`bg-white rounded-lg shadow-md p-6 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-800">Event Calendar</h3>
-        <div className="flex items-center space-x-2">
+    <div className={`bg-white rounded-2xl shadow-card p-6 border border-gray-100 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center space-x-3">
           <button
             onClick={() => navigateMonth(-1)}
-            className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+            className="p-3 hover:bg-primary-100 rounded-xl transition-all duration-200 group"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h4 className="text-lg font-medium text-gray-900 min-w-[140px] text-center">
+          <h4 className="text-xl font-bold text-gray-900 min-w-[160px] text-center">
             {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
           </h4>
           <button
             onClick={() => navigateMonth(1)}
-            className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+            className="p-3 hover:bg-primary-100 rounded-xl transition-all duration-200 group"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
@@ -172,8 +171,8 @@ export default function EventCalendar({ events = [] }) {
       </div>
 
       {/* Selected Date Events */}
-      <div className="border-t pt-4">
-        <h4 className="text-sm font-medium text-gray-800 mb-3">
+      <div className="border-t border-gray-200 pt-6">
+        <h4 className="text-lg font-bold text-gray-900 mb-4">
           Events on {selectedDate.toLocaleDateString('en-US', { 
             weekday: 'long', 
             year: 'numeric', 
@@ -181,34 +180,44 @@ export default function EventCalendar({ events = [] }) {
             day: 'numeric' 
           })}
         </h4>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {getEventsForDate(selectedDate).length > 0 ? (
             getEventsForDate(selectedDate).map((event) => (
               <Link
                 key={event.ID}
                 to={`/events/${event.ID}`}
-                className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                className="block p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-primary-50 hover:to-blue-50 transition-all duration-300 group border border-gray-200 hover:border-primary-200"
               >
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-3 h-3 bg-gradient-to-br from-primary-500 to-blue-500 rounded-full shadow-sm"></div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="text-sm font-medium text-gray-900 truncate">
+                    <h5 className="text-sm font-semibold text-gray-900 truncate group-hover:text-primary-700 transition-colors">
                       {event.Title}
                     </h5>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 font-medium">
                       {new Date(event.Date).toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit'
                       })}
                     </p>
                   </div>
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </Link>
             ))
           ) : (
-            <p className="text-sm text-gray-500 text-center py-4">
-              No events on this date
-            </p>
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <p className="text-gray-500 font-medium">No events on this date</p>
+            </div>
           )}
         </div>
       </div>

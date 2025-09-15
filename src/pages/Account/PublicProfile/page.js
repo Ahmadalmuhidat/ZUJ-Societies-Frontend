@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AxiosClient from '../../../config/axios';
+import { SkeletonList } from '../../../shared/components/LoadingSpinner';
 
 export default function PublicProfile() {
   const { id } = useParams();
@@ -42,13 +43,7 @@ export default function PublicProfile() {
     <main className={`min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 py-8 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       <div className="max-w-6xl mx-auto">
         {loading ? (
-          <div className="space-y-6 animate-pulse">
-            <div className="h-32 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/20"></div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="h-48 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/20"></div>
-              <div className="h-48 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 lg:col-span-2"></div>
-            </div>
-          </div>
+          <SkeletonList count={3} className="space-y-6" />
         ) : (
           <>
             {/* Header */}

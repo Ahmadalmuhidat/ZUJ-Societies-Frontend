@@ -38,7 +38,7 @@ export default function Societies() {
   }, []);
 
   return (
-    <main className={`min-h-screen bg-gray-50 py-10 sm:py-12 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+    <main className={`min-h-screen py-10 sm:py-12 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col xl:flex-row gap-8">
           {/* Main Content */}

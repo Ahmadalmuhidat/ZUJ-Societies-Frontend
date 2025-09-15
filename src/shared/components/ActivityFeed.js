@@ -160,30 +160,30 @@ export default function ActivityFeed() {
   }
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm p-4 mb-4 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold text-gray-800">Recent Activity</h3>
-        <Link to="/activity" className="text-sm text-blue-600 hover:text-blue-800">
+    <div className={`bg-white rounded-2xl shadow-card p-6 mb-6 border border-gray-100 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-xl font-bold text-gray-900">Recent Activity</h3>
+        <Link to="/activity" className="text-sm text-primary-600 hover:text-primary-800 font-semibold transition-colors">
           View All
         </Link>
       </div>
       
-      <div className="space-y-3">
+      <div className="space-y-4">
         {activities.map((activity) => (
-          <div key={activity.id} className="flex items-start space-x-3">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getActivityColor(activity.type)}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div key={activity.id} className="flex items-start space-x-4 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 group">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm ${getActivityColor(activity.type)}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={getActivityIcon(activity.type)} />
               </svg>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm text-gray-900">
-                <span className="font-medium">{activity.user}</span> {activity.action}{' '}
-                <span className="text-blue-600 hover:text-blue-800 cursor-pointer">
+                <span className="font-semibold">{activity.user}</span> {activity.action}{' '}
+                <span className="text-primary-600 hover:text-primary-800 cursor-pointer font-medium">
                   {activity.target}
                 </span>
               </p>
-              <p className="text-xs text-gray-500">{activity.time}</p>
+              <p className="text-xs text-gray-500 font-medium">{activity.time}</p>
             </div>
           </div>
         ))}

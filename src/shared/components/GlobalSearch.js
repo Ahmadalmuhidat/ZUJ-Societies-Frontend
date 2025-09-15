@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AxiosClient from '../../config/axios';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function GlobalSearch() {
   const [query, setQuery] = useState('');
@@ -189,8 +190,7 @@ export default function GlobalSearch() {
         <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-96 overflow-y-auto">
           {loading ? (
             <div className="p-4 text-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="text-sm text-gray-600 mt-2">Searching...</p>
+              <LoadingSpinner size="small" text="Searching..." />
             </div>
           ) : getTotalResults() > 0 ? (
             <div>

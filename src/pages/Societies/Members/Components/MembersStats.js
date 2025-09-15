@@ -6,13 +6,13 @@ export default function MembersStats({ members }) {
   const moderatorsCount = members.filter((m) => m.Role === "moderator").length;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       {/* Total Members */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-2xl shadow-card p-4 border border-gray-100 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center">
-          <div className="p-3 bg-blue-100 rounded-full">
+          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl shadow-lg">
             <svg
-              className="w-6 h-6 text-blue-600"
+              className="w-5 h-5 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -25,19 +25,19 @@ export default function MembersStats({ members }) {
               />
             </svg>
           </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">Total Members</p>
-            <p className="text-2xl font-semibold text-gray-900">{totalMembers}</p>
+          <div className="ml-3">
+            <p className="text-xs font-medium text-gray-600">Total Members</p>
+            <p className="text-xl font-bold text-gray-900">{totalMembers}</p>
           </div>
         </div>
       </div>
 
       {/* Admins */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-2xl shadow-card p-4 border border-gray-100 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center">
-          <div className="p-3 bg-red-100 rounded-full">
+          <div className="p-3 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl shadow-lg">
             <svg
-              className="w-6 h-6 text-red-600"
+              className="w-5 h-5 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -50,19 +50,19 @@ export default function MembersStats({ members }) {
               />
             </svg>
           </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">Admins</p>
-            <p className="text-2xl font-semibold text-gray-900">{adminsCount}</p>
+          <div className="ml-3">
+            <p className="text-xs font-medium text-gray-600">Admins</p>
+            <p className="text-xl font-bold text-gray-900">{adminsCount}</p>
           </div>
         </div>
       </div>
 
       {/* Moderators */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-2xl shadow-card p-4 border border-gray-100 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center">
-          <div className="p-3 bg-purple-100 rounded-full">
+          <div className="p-3 bg-gradient-to-br from-purple-500 to-violet-500 rounded-xl shadow-lg">
             <svg
-              className="w-6 h-6 text-purple-600"
+              className="w-5 h-5 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -75,9 +75,9 @@ export default function MembersStats({ members }) {
               />
             </svg>
           </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">Moderators</p>
-            <p className="text-2xl font-semibold text-gray-900">{moderatorsCount}</p>
+          <div className="ml-3">
+            <p className="text-xs font-medium text-gray-600">Moderators</p>
+            <p className="text-xl font-bold text-gray-900">{moderatorsCount}</p>
           </div>
         </div>
       </div>

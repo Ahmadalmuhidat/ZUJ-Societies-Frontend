@@ -1,17 +1,11 @@
 import { useEffect, useState } from 'react';
 import EventCard from './Components/EventCard';
-import EventFilters from './Components/EventFilters';
 import EventCalendar from '../../shared/components/EventCalendar';
 import AdvancedEventFilters from '../../shared/components/AdvancedEventFilters';
 import GlobalSearch from '../../shared/components/GlobalSearch';
 import AxiosClient from '../../config/axios';
 
 export default function Events() {
-  const [filter, setFilter] = useState({
-    days: 'All Days',
-    type: 'Event Type',
-    category: 'Any Category'
-  });
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -41,13 +35,13 @@ export default function Events() {
   }, []);
 
   return (
-    <main className={`min-h-screen bg-gray-50 py-10 sm:py-12 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+    <main className={`min-h-screen py-10 sm:py-12 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Content */}
           <div className="lg:w-2/3">
             <div className="mb-6">
-              <AdvancedEventFilters events={events} onFilterChange={setFilter} />
+              <AdvancedEventFilters events={events} />
             </div>
 
             {loading ? (
@@ -81,7 +75,6 @@ export default function Events() {
           {/* Sidebar */}
           <div className="lg:w-1/3 space-y-6">
             <EventCalendar events={events} />
-            <EventFilters filter={filter} setFilter={setFilter} />
           </div>
         </div>
       </div>

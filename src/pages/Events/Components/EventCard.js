@@ -63,13 +63,13 @@ export default function EventCard({ onEventDeleted, ...event }) {
     <>
       <div
         onClick={handleClick}
-        className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md group transition-all duration-300 transform hover:-translate-y-1 cursor-pointer mb-4 relative"
+        className="bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-xl group transition-all duration-500 transform hover:-translate-y-2 cursor-pointer mb-6 relative border border-gray-100"
       >
         {/* Delete button */}
         {canDelete && (
           <button
             onClick={handleDeleteClick}
-            className="absolute top-3 right-3 z-10 p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg"
+            className="absolute top-4 right-4 z-10 p-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg backdrop-blur-sm"
             title="Delete event"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,30 +78,43 @@ export default function EventCard({ onEventDeleted, ...event }) {
           </button>
         )}
 
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className="relative h-52 w-full overflow-hidden">
           <img 
             src={event.Image || defaultImage}
             alt={event.Title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = defaultImage;
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5">
+            <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">{event.Category}</span>
+          </div>
         </div>
 
-        <div className="p-4 flex gap-3">
-          <div className="flex flex-col items-center justify-center bg-indigo-100 rounded-lg px-3 py-2 text-indigo-700 min-w-[80px]">
-            <span className="text-xs font-semibold">{event.Time}</span>
-            <span className="text-sm font-bold">{formattedDate}</span>
+        <div className="p-6">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="flex flex-col items-center justify-center bg-gradient-to-br from-primary-500 to-blue-500 rounded-xl px-3 py-2 text-white min-w-[75px] shadow-lg">
+              <span className="text-xs font-semibold opacity-90">{event.Time}</span>
+              <span className="text-xs font-bold">{formattedDate}</span>
+            </div>
+
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors duration-300 mb-2">{event.Title}</h3>
+              <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">{event.Description}</p>
+            </div>
           </div>
 
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-indigo-700 transition-colors duration-300 mb-1">{event.Title}</h3>
-            <p className="text-sm text-gray-600 line-clamp-2 mb-2 whitespace-pre-line">{event.Description}</p>
-            <div className="text-xs text-gray-500">
-              📍 {event.Location} &nbsp;|&nbsp; 🏷️ {event.Category}
+          <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="font-medium">{event.Location}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="font-medium">{event.Category}</span>
             </div>
           </div>
         </div>

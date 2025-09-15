@@ -47,9 +47,14 @@ function App() {
             element={
               <PrivateRoute>
                 <MembershipProvider>
-                  <div className="flex h-screen bg-gray-50">
+                  <div className="flex h-screen bg-gradient-to-br from-primary-50 via-white to-primary-100 relative">
+                    {/* Animated background pattern */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+                    </div>
                     <Sidebar />
-                    <main className="flex-1 overflow-auto lg:ml-0">
+                    <main className="flex-1 overflow-auto lg:ml-0 relative z-10">
                       <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />

@@ -161,28 +161,34 @@ export default function PostCard({ post }) {
       )}
 
       {/* Post Card */}
-      <div className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 max-w-2xl mx-auto transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-        <div className="p-4">
+      <div className={`bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden mb-8 max-w-2xl mx-auto transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+        <div className="p-6">
           {/* User Info */}
-          <div className="flex items-center gap-3 mb-4">
-            <img
-              src={post.User_Image || 'https://cdn-icons-png.flaticon.com/512/4537/4537019.png'}
-              alt={post.User_Name}
-              className="w-9 h-9 rounded-full object-cover"
-            />
-            <h3 className="font-medium text-gray-800 text-sm">{post.User_Name}</h3>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="relative">
+              <img
+                src={post.User_Image || 'https://cdn-icons-png.flaticon.com/512/4537/4537019.png'}
+                alt={post.User_Name}
+                className="w-12 h-12 rounded-xl object-cover border-2 border-gray-100"
+              />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 text-sm">{post.User_Name}</h3>
+              <p className="text-xs text-gray-500">Just now</p>
+            </div>
           </div>
 
           {/* Content */}
-          <p className="text-gray-800 text-sm mb-4 leading-relaxed">{post.Content}</p>
+          <p className="text-gray-800 text-base mb-6 leading-relaxed">{post.Content}</p>
 
           {/* Image */}
           {post.Image && (
-            <div className="rounded-md overflow-hidden mb-4">
+            <div className="rounded-2xl overflow-hidden mb-6 shadow-lg">
               <img
                 src={post.Image || defaultImage}
                 alt="Post"
-                className="w-full h-64 object-cover transition-transform duration-500 hover:scale-[1.01]"
+                className="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
                 loading="lazy"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
@@ -193,28 +199,47 @@ export default function PostCard({ post }) {
           )}
 
           {/* Actions */}
-          <div className="mb-4">
+          <div className="mb-6">
             {isAuthenticated ? (
               <div className="flex items-center justify-between text-gray-500 text-sm">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-6">
                   <button
                     onClick={handleLike}
-                    className={`flex items-center ${isLiked ? 'text-blue-600' : 'text-gray-600'} hover:text-blue-500`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+                      isLiked 
+                        ? 'text-primary-600 bg-primary-50' 
+                        : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
+                    }`}
                   >
+                    <svg className="w-4 h-4" fill={isLiked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
                     {likesCount} Likes
                   </button>
 
-                  <button onClick={toggleComments} className="flex items-center hover:text-blue-500">
+                  <button 
+                    onClick={toggleComments} 
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 hover:text-primary-600 hover:bg-gray-50 transition-all duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
                     {comments.length} Comments
                   </button>
 
-                  <button onClick={openReportModal} className="flex items-center text-red-500 hover:text-red-600">
+                  <button 
+                    onClick={openReportModal} 
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-red-500 hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
                     Report
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="text-gray-500 text-sm">
+              <div className="text-gray-500 text-sm px-4 py-2 bg-gray-50 rounded-xl">
                 {likesCount} Likes • {comments.length} Comments
               </div>
             )}
@@ -222,12 +247,12 @@ export default function PostCard({ post }) {
 
           {/* Comments */}
           {showComments && (
-            <div className="border-t pt-4">
+            <div className="border-t border-gray-100 pt-6">
               {loadingComments ? (
-                <div className="space-y-3 animate-pulse">
+                <div className="space-y-4 animate-pulse">
                   {[...Array(2)].map((_, i) => (
-                    <div key={i} className="flex">
-                      <div className="h-8 w-8 rounded-full bg-gray-200 mr-2"></div>
+                    <div key={i} className="flex gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-gray-200"></div>
                       <div className="flex-1">
                         <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
                         <div className="h-3 bg-gray-200 rounded w-5/6"></div>
@@ -239,15 +264,18 @@ export default function PostCard({ post }) {
                 <CommentList comments={comments} postId={post.ID} />
               )}
               {isAuthenticated && (
-                <form onSubmit={handleAddComment} className="mt-4 flex">
+                <form onSubmit={handleAddComment} className="mt-6 flex gap-3">
                   <input
                     type="text"
                     placeholder="Add a comment..."
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
-                    className="flex-1 border rounded-l-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    className="flex-1 border border-gray-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
                   />
-                  <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600">
+                  <button 
+                    type="submit" 
+                    className="bg-gradient-to-r from-primary-500 to-blue-500 text-white px-6 py-3 rounded-xl hover:from-primary-600 hover:to-blue-600 transition-all duration-200 shadow-lg"
+                  >
                     Post
                   </button>
                 </form>
