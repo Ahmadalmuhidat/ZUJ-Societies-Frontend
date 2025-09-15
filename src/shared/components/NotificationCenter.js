@@ -5,7 +5,6 @@ import { useAuth } from '../../context/AuthContext';
 export default function NotificationCenter() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -74,83 +73,71 @@ export default function NotificationCenter() {
   };
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.828 7l2.586 2.586a2 2 0 002.828 0L12.828 7H4.828zM4 12h16M4 16h16" />
-        </svg>
+    <div className="bg-white rounded-2xl shadow-card p-6 border border-gray-100">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+          Notifications
+          {unreadCount > 0 && (
+            <span className="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              {unreadCount}
+            </span>
+          )}
+        </h3>
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {unreadCount}
-          </span>
+          <button
+            onClick={markAllAsRead}
+            className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+          >
+            Mark all read
+          </button>
         )}
-      </button>
+      </div>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50">
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-gray-900">Notifications</h3>
-              {unreadCount > 0 && (
-                <button
-                  onClick={markAllAsRead}
-                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Mark all read
-                </button>
-              )}
-            </div>
+      <div className="max-h-64 overflow-y-auto">
+        {notifications.length === 0 ? (
+          <div className="text-center text-gray-500 py-4">
+            <svg className="mx-auto h-8 w-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.828 7l2.586 2.586a2 2 0 002.828 0L12.828 7H4.828zM4 12h16M4 16h16" />
+            </svg>
+            <p className="text-sm">No notifications yet</p>
           </div>
-
-          <div className="max-h-96 overflow-y-auto">
-            {notifications.length === 0 ? (
-              <div className="p-6 text-center text-gray-500">
-                <svg className="mx-auto h-8 w-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.828 7l2.586 2.586a2 2 0 002.828 0L12.828 7H4.828zM4 12h16M4 16h16" />
-                </svg>
-                <p className="text-sm">No notifications yet</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-gray-200">
-                {notifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className={`p-4 hover:bg-gray-50 cursor-pointer ${!notification.read ? 'bg-blue-50' : ''}`}
-                    onClick={() => markAsRead(notification.id)}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getNotificationColor(notification.type)}`}>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={getNotificationIcon(notification.type)} />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-gray-900">{notification.title}</h4>
-                        <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                        <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
-                      </div>
-                      {!notification.read && (
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      )}
-                    </div>
+        ) : (
+          <div className="space-y-3">
+            {notifications.slice(0, 3).map((notification) => (
+              <div
+                key={notification.id}
+                className={`p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors ${!notification.read ? 'bg-blue-50 border-l-4 border-blue-500' : ''}`}
+                onClick={() => markAsRead(notification.id)}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${getNotificationColor(notification.type)}`}>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={getNotificationIcon(notification.type)} />
+                    </svg>
                   </div>
-                ))}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-medium text-gray-900 truncate">{notification.title}</h4>
+                    <p className="text-xs text-gray-600 mt-1 line-clamp-2">{notification.message}</p>
+                    <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
+                  </div>
+                  {!notification.read && (
+                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                  )}
+                </div>
               </div>
-            )}
+            ))}
           </div>
+        )}
+      </div>
 
-          <div className="p-4 border-t border-gray-200">
-            <Link
-              to="/notifications"
-              className="block text-center text-sm text-blue-600 hover:text-blue-800 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              View all notifications
-            </Link>
-          </div>
+      {notifications.length > 3 && (
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <Link
+            to="/notifications"
+            className="block text-center text-sm text-blue-600 hover:text-blue-800 font-medium"
+          >
+            View all notifications ({notifications.length})
+          </Link>
         </div>
       )}
     </div>
