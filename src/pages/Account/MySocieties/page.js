@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import AxiosClient from '../../../config/axios';
 import AsAdmin from './Components/AsAdmin';
 import AsMemeber from './Components/AsMember';
-import Welcome from './Components/Welcome';
 import QuickStats from './Components/QuickStats';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function MySocieties() {
   const [societies, setSocieties] = useState([]);
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   const getSocietiesByUser = async () => {
     try {
@@ -57,7 +58,14 @@ export default function MySocieties() {
           </div>
         ) : (
           <>
-            <Welcome />
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                Welcome back, {user?.Name}!
+              </h2>
+              <p className="text-gray-600">
+                Here's what's happening in your societies and communities.
+              </p>
+            </div>
             {adminSocieties.length > 0 && <AsAdmin societies={societies} />}
             <AsMemeber societies={societies} />
             <QuickStats societies={societies} />

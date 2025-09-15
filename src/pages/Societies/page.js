@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SocietyCard from './Components/SocietyCard';
 import { useAuth } from '../../context/AuthContext';
-import SocietySearch from '../../shared/components/SocietySearch';
 import SocietyInsights from '../../shared/components/SocietyInsights';
 import GlobalSearch from '../../shared/components/GlobalSearch';
 import AxiosClient from '../../config/axios';
@@ -44,10 +43,7 @@ export default function Societies() {
           {/* Main Content */}
           <div className="xl:w-3/4">
             <div className="mb-6">
-              <SocietySearch societies={societies} onSearchChange={(query) => {
-                // Handle search logic here
-                console.log('Search query:', query);
-              }} />
+              <GlobalSearch />
             </div>
 
             <div className="mb-12">

@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function PrivacyPage() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const idAnim = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(idAnim);
-  }, []);
-
   return (
-    <div className={`min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
