@@ -11,8 +11,8 @@ export default function PostCard({ post }) {
   const [showComments, setShowComments] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportMessage, setReportMessage] = useState('');
-  const [isLiked, setIsLiked] = useState(post.Is_Liked);
-  const [likesCount, setLikesCount] = useState(post.Likes);
+  const [isLiked, setIsLiked] = useState(post.Is_Liked || false);
+  const [likesCount, setLikesCount] = useState(post.Likes || 0);
   const [mounted, setMounted] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
   const defaultImage = 'https://img.freepik.com/free-vector/multicultural-people-standing-together_74855-6583.jpg';

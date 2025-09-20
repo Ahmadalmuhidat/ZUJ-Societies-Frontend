@@ -4,7 +4,6 @@ import Sidebar from './Components/Sidebar';
 import WelcomeBack from './Components/WelcomeBack';
 import ActivityFeed from '../../shared/components/ActivityFeed';
 import TrendingPosts from '../../shared/components/TrendingPosts';
-import NotificationCenter from '../../shared/components/NotificationCenter';
 import PersonalizedRecommendations from '../../shared/components/PersonalizedRecommendations';
 import QuickPostCreator from '../../shared/components/QuickPostCreator';
 
@@ -35,7 +34,6 @@ export default function Home() {
                 <QuickPostCreator />
                 <ActivityFeed />
                 <TrendingPosts />
-                <NotificationCenter />
                 <PersonalizedRecommendations />
               </>
             )}

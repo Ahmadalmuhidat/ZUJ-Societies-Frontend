@@ -12,7 +12,7 @@ export default function RequestDetails({ setRequests, selectedRequest, setSelect
       request_id: requestId
     });
 
-    if (response.status === 200) {
+    if (response.status === 204) {
       setSelectedRequest(null);
     }
   };

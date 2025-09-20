@@ -54,17 +54,19 @@ export default function SocietyHeader({ societyId, showJoinButton = false, actio
     if (!isAuthenticated) return;
 
     try {
-      const response = await AxiosClient.post("/societies/join_society_request", {
+      const response = await AxiosClient.post("/societies/join_request", {
         society_id: societyId,
         token: localStorage.getItem("token") || sessionStorage.getItem("token")
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         joinStatusCache.set(societyId, true);
         setJoinRequested(true);
       }
     } catch (err) {
       console.error('Failed to request join:', err);
+      const errorMessage = err.response?.data?.error_message || 'Failed to send join request. Please try again.';
+      alert(errorMessage);
     }
   };
 

@@ -28,6 +28,8 @@ import SocietySettings from './pages/Societies/Settings/page';
 import NewSociety from './pages/Societies/Create/page';
 import NewEvent from './pages/Events/NewEvent/page';
 import EventDetailsPage from './pages/Events/Details/page';
+import TrendingPage from './pages/Trending/page';
+import NotificationsPage from './pages/Notifications/page';
 import Sidebar from './shared/layout/Sidebar';
 
 function App() {
@@ -80,6 +82,8 @@ function App() {
                         <Route path="/societies/:id/members" element={<SocietyMembers />} />
                         <Route path="/societies/:id/join-requests" element={<SocietyJoinRequests />} />
                         <Route path="/societies/:id/settings" element={<SocietySettings />} />
+                        <Route path="/trending" element={<TrendingPage />} />
+                        <Route path="/notifications" element={<NotificationsPage />} />
                       </Routes>
                     </main>
                   </div>

@@ -27,10 +27,13 @@ export default function Signup() {
         student_id: formData.student_id,
         photo: formData.photo,
       });
-      return response.status === 201;
+      return { success: true, data: response.data };
     } catch (error) {
       console.error('Signup failed:', error);
-      return false;
+      return { 
+        success: false, 
+        error: error.response?.data?.error_message || 'Registration failed. Please try again.' 
+      };
     }
   };
 
@@ -94,16 +97,24 @@ export default function Signup() {
     e.preventDefault();
     if (validateForm()) {
       setIsLoading(true);
-      const success = await signup();
+      const result = await signup();
       setIsLoading(false);
 
-      if (success) {
+      if (result.success) {
         toast.success('Account created successfully! Please log in.');
         navigate('/login');
       } else {
-        const errorMessage = 'Registration failed. Email may already be in use.';
-        setErrors({ ...errors, email: errorMessage });
-        toast.error(errorMessage);
+        const errorMessage = result.error;
+        
+        // Check if it's a duplicate email error
+        if (errorMessage.includes('Email already exists')) {
+          setErrors({ ...errors, email: errorMessage });
+        } else if (errorMessage.includes('Student ID already exists')) {
+          setErrors({ ...errors, student_id: errorMessage });
+        } else {
+          // For other errors, show a general error
+          toast.error(errorMessage);
+        }
       }
     }
   };
