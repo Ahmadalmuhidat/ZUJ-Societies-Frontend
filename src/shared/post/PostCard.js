@@ -4,8 +4,8 @@ import AxiosClient from '../../config/axios';
 import { useAuth } from '../../context/AuthContext';
 import CommentList from './CommentList';
 
-export default function PostCard({ post }) {
-  const { isAuthenticated } = useAuth();
+export default function PostCard({ post, onPostDeleted }) {
+  const { isAuthenticated, user } = useAuth();
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [showComments, setShowComments] = useState(false);
@@ -15,6 +15,8 @@ export default function PostCard({ post }) {
   const [likesCount, setLikesCount] = useState(post.Likes || 0);
   const [mounted, setMounted] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const defaultImage = 'https://img.freepik.com/free-vector/multicultural-people-standing-together_74855-6583.jpg';
 
   const handleLike = async () => {
@@ -77,6 +79,44 @@ export default function PostCard({ post }) {
       console.error('Failed to add comment:', err);
       setComments((prev) => prev.filter((c) => c.id !== tempId));
     }
+  };
+
+  const handleCommentDeleted = (deletedCommentId) => {
+    setComments((prev) => prev.filter((comment) => comment.ID !== deletedCommentId));
+  };
+
+  const handleDeletePost = async () => {
+    try {
+      setIsDeleting(true);
+      const response = await AxiosClient.delete('/posts/delete_post', {
+        params: {
+          post_id: post.ID,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success('Post deleted successfully.');
+        setShowDeleteModal(false);
+        if (onPostDeleted) {
+          onPostDeleted(post.ID);
+        }
+      } else {
+        toast.error('Failed to delete post.');
+      }
+    } catch (err) {
+      console.error('Failed to delete post:', err);
+      toast.error('An error occurred while deleting the post.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const openDeleteModal = () => {
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
   };
 
   const toggleComments = () => setShowComments((prev) => !prev);
@@ -160,23 +200,65 @@ export default function PostCard({ post }) {
         </div>
       )}
 
+      {/* Delete Post Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[60]">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl relative z-[61]">
+            <h2 className="text-lg font-semibold mb-4 text-red-600">Delete Post</h2>
+            <p className="text-gray-700 mb-6">
+              Are you sure you want to delete this post? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={closeDeleteModal}
+                disabled={isDeleting}
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeletePost}
+                disabled={isDeleting}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:opacity-50"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Post'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Post Card */}
       <div className={`bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden mb-8 max-w-2xl mx-auto transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="p-6">
           {/* User Info */}
-          <div className="flex items-center gap-4 mb-6">
-            <div className="relative">
-              <img
-                src={post.User_Image || 'https://cdn-icons-png.flaticon.com/512/4537/4537019.png'}
-                alt={post.User_Name}
-                className="w-12 h-12 rounded-xl object-cover border-2 border-gray-100"
-              />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <img
+                  src={post.User_Image || 'https://cdn-icons-png.flaticon.com/512/4537/4537019.png'}
+                  alt={post.User_Name}
+                  className="w-12 h-12 rounded-xl object-cover border-2 border-gray-100"
+                />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 text-sm">{post.User_Name}</h3>
+                <p className="text-xs text-gray-500">Just now</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 text-sm">{post.User_Name}</h3>
-              <p className="text-xs text-gray-500">Just now</p>
-            </div>
+            {/* Delete button for post owner */}
+            {isAuthenticated && user && user.ID === post.User && (
+              <button
+                onClick={openDeleteModal}
+                className="text-red-500 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors"
+                title="Delete post"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            )}
           </div>
 
           {/* Content */}
@@ -261,7 +343,7 @@ export default function PostCard({ post }) {
                   ))}
                 </div>
               ) : (
-                <CommentList comments={comments} postId={post.ID} />
+                <CommentList comments={comments} postId={post.ID} onCommentDeleted={handleCommentDeleted} />
               )}
               {isAuthenticated && (
                 <form onSubmit={handleAddComment} className="mt-6 flex gap-3">

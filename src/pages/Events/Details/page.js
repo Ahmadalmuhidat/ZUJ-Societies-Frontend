@@ -20,9 +20,7 @@ export default function EventDetailsPage() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [eventStats, setEventStats] = useState({ attendees: 0, interested: 0, shares: 0 });
-  const [relatedEvents, setRelatedEvents] = useState([]);
   const [loadingStats, setLoadingStats] = useState(true);
-  const [loadingRelated, setLoadingRelated] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const defaultImage = 'https://img.freepik.com/free-vector/multicultural-people-standing-together_74855-6583.jpg';
@@ -67,22 +65,6 @@ export default function EventDetailsPage() {
     }
   };
 
-  // Fetch related events
-  const getRelatedEvents = async () => {
-    try {
-      setLoadingRelated(true);
-      const response = await AxiosClient.get("/events/get_related_events", {
-        params: { event_id: id, limit: 3 }
-      });
-      if (response.status === 200) {
-        setRelatedEvents(response.data.data);
-      }
-    } catch (err) {
-      console.error("Failed to fetch related events:", err);
-    } finally {
-      setLoadingRelated(false);
-    }
-  };
 
   // Get user's event status (attendance and bookmark)
   const getUserEventStatus = async () => {
@@ -180,12 +162,10 @@ export default function EventDetailsPage() {
   const handleDeleteEvent = async () => {
     try {
       setIsDeleting(true);
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       
       const response = await AxiosClient.delete("/events/delete_event", {
         params: { 
-          event_id: event.ID,
-          token: token
+          event_id: event.ID
         }
       });
 
@@ -205,7 +185,6 @@ export default function EventDetailsPage() {
   useEffect(() => {
     getEventInfo();
     getEventStats();
-    getRelatedEvents();
     getUserEventStatus();
     const idAnim = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(idAnim);
@@ -674,68 +653,6 @@ export default function EventDetailsPage() {
               )}
             </div>
 
-            {/* Related Events */}
-            <div className="bg-white rounded-2xl shadow-card border border-gray-100 p-5">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <div className="w-6 h-6 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-3 h-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                Related Events
-              </h3>
-              {loadingRelated ? (
-                <div className="space-y-3">
-                  {[...Array(2)].map((_, i) => (
-                    <div key={i} className="p-3 bg-gray-50 rounded-lg animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : relatedEvents.length > 0 ? (
-                <div className="space-y-3">
-                  {relatedEvents.map((relatedEvent) => {
-                    const eventDate = new Date(relatedEvent.Date);
-                    const formattedDate = eventDate.toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric'
-                    });
-                    const formattedTime = relatedEvent.Time || 'TBD';
-                    
-                    return (
-                      <Link
-                        key={relatedEvent.ID}
-                        to={`/events/${relatedEvent.ID}`}
-                        className="block p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg hover:from-orange-50 hover:to-orange-100 transition-all duration-300 border border-gray-200 hover:border-orange-200 group"
-                      >
-                        <h4 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-orange-700 transition-colors">
-                          {relatedEvent.Title}
-                        </h4>
-                        <p className="text-xs text-gray-600 font-medium">
-                          {formattedDate} • {formattedTime}
-                        </p>
-                        {relatedEvent.Category && (
-                          <span className="inline-block mt-2 px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-lg font-medium">
-                            {relatedEvent.Category}
-                          </span>
-                        )}
-                      </Link>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-6">
-                  <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <p className="text-sm text-gray-500 font-medium">No related events found</p>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>

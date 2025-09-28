@@ -30,12 +30,10 @@ export default function EventCard({ onEventDeleted, ...event }) {
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       
       const response = await AxiosClient.delete("/events/delete_event", {
         params: { 
-          event_id: event.ID,
-          token: token
+          event_id: event.ID
         }
       });
 

@@ -58,7 +58,17 @@ export default function CommentList({ comments, postId, onCommentDeleted }) {
 
   // Check if current user can delete this comment
   const canDeleteComment = (comment) => {
-    return isAuthenticated && user && (user.ID === comment.User || user.Role === 'admin');
+    console.log('Debug comment deletion:');
+    console.log('isAuthenticated:', isAuthenticated);
+    console.log('user:', user);
+    console.log('comment:', comment);
+    console.log('user.ID:', user?.ID);
+    console.log('comment.User_ID:', comment.User_ID);
+    console.log('comment.User:', comment.User);
+    
+    const canDelete = isAuthenticated && user && (user.ID === comment.User_ID || user.ID === comment.User || user.Role === 'admin');
+    console.log('canDelete:', canDelete);
+    return canDelete;
   };
 
   useEffect(() => {

@@ -33,14 +33,19 @@ AxiosClient.interceptors.response.use(
     const message =
       data?.error || data?.message || data?.error_message || error.message;
 
-    if (status === 400 || status === 403 || status === 404) {
-      toast.error(`Error ${status}: ${message}`);
-    } else if (status === 401) {
-      toast.warning("Unauthorized - please log in again.");
-    } else if (status === 500) {
-      toast.error("Server error. Please try again later.");
-    } else {
-      toast.error(message || "Something went wrong.");
+    // Only show toasts for specific errors that aren't handled by components
+    // Skip showing toasts if the error is already being handled by the component
+    const skipToast = error.config?.skipToast || false;
+    
+    if (!skipToast) {
+      if (status === 401) {
+        toast.warning("Unauthorized - please log in again.");
+      } else if (status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else if (status >= 400 && status < 500) {
+        // Only show client errors if they're not already handled
+        toast.error(message || "Request failed");
+      }
     }
 
     return Promise.reject(error);

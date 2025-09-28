@@ -8,6 +8,7 @@ import Privacy from './Components/Privacy';
 import Permissions from './Components/Permissions';
 import Notifications from './Components/Notifications';
 import DangerZone from './Components/DangerZone';
+import { useAutoSave } from '../../../hooks/useAutoSave';
 
 export default function SocietySettings() {
   const { id } = useParams();
@@ -39,7 +40,9 @@ export default function SocietySettings() {
     }
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const handleSaveChanges = async () => {
     const loadingToastId = toast.loading(`Updating society information...`);
@@ -57,10 +60,36 @@ export default function SocietySettings() {
 
       if (response.status === 204) {
         toast.success(`Society information has been updated`, { id: loadingToastId });
+      } else {
+        toast.error(`Unexpected response status: ${response.status}`, { id: loadingToastId });
       }
     } catch (error) {
       console.error(error);
       toast.error(`Something went wrong while updating the society information`, { id: loadingToastId });
+    }
+  };
+
+  const handleDeleteSociety = async () => {
+    try {
+      setIsDeleting(true);
+      const response = await AxiosClient.delete('/societies/delete_society', {
+        params: {
+          society_id: id,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success('Society deleted successfully');
+        navigate('/societies');
+      } else {
+        toast.error('Failed to delete society');
+      }
+    } catch (error) {
+      console.error('Error deleting society:', error);
+      toast.error(error.response?.data?.error_message || 'Failed to delete society');
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -73,7 +102,7 @@ export default function SocietySettings() {
       if (response.status === 200) {
         const data = response.data.data;
 
-        setSettings({
+        const newSettings = {
           general: {
             name: data.Name,
             description: data.Description,
@@ -97,7 +126,10 @@ export default function SocietySettings() {
             weeklyDigest: false,
             emailNotifications: true
           }
-        });
+        };
+        
+        setSettings(newSettings);
+        setDataLoaded(true);
       }
     } catch (error) {
       console.error('Error fetching society details:', error);
@@ -144,20 +176,53 @@ export default function SocietySettings() {
     }));
   };
 
+  // Auto-save function for switch settings (privacy, permissions, notifications)
+  const saveSwitchSettings = async () => {
+    try {
+      const response = await AxiosClient.put('/societies/update_info', {
+        society_id: id,
+        privacy: settings.privacy,
+        permissions: settings.permissions,
+        notifications: settings.notifications
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Failed to save settings');
+      }
+    } catch (error) {
+      console.error('Auto-save failed:', error);
+      throw error;
+    }
+  };
+
+  // Use auto-save hook for switch settings (only after data is loaded)
+  const { isSaving, lastSaved } = useAutoSave(
+    saveSwitchSettings, 
+    dataLoaded ? { 
+      privacy: settings.privacy, 
+      permissions: settings.permissions, 
+      notifications: settings.notifications 
+    } : null, 
+    1500
+  );
+
   const leaveSociety = async () => {
     const loadingToastId = toast.loading(`leaving society`);
     try {
       const response = await AxiosClient.put("/societies/leave_society", {
-        token: localStorage.getItem("token") || sessionStorage.getItem("token"),
         society_id: id
       });
 
       if (response.status === 200) {
         toast.success(`You left the society`, { id: loadingToastId });
         navigate("/societies");
+      } else {
+        toast.error(`Unexpected response status: ${response.status}`, { id: loadingToastId });
       }
     } catch (error) {
-      toast.error(`Something went wrong while leaving the society`, { id: loadingToastId });
+      console.error('Error leaving society:', error);
+      const errorMessage = error.response?.data?.error_message || 'Something went wrong while leaving the society';
+      toast.error(errorMessage, { id: loadingToastId });
     }
   };
 
@@ -220,11 +285,36 @@ export default function SocietySettings() {
                 {activeTab === 'notifications' && <Notifications settings={settings} handleNotificationChange={handleNotificationChange} />}
                 {activeTab === 'danger' && <DangerZone leaveSociety={leaveSociety} setShowDeleteConfirm={setShowDeleteConfirm} />}
 
-                {activeTab !== 'danger' && (
+                {activeTab === 'general' && (
                   <div className="mt-6 pt-6 border-t border-gray-200">
                     <div className="flex justify-end space-x-3">
                       <button className="px-4 py-2.5 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium">Cancel</button>
                       <button onClick={handleSaveChanges} className="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-semibold shadow-lg">Save Changes</button>
+                    </div>
+                  </div>
+                )}
+
+                {(activeTab === 'privacy' || activeTab === 'permissions' || activeTab === 'notifications') && (
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <div className="flex items-center justify-center text-sm text-gray-500">
+                      {isSaving ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+                          Saving settings...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Settings are saved automatically
+                          {lastSaved && (
+                            <span className="ml-1 text-xs">
+                              (last saved: {lastSaved.toLocaleTimeString()})
+                            </span>
+                          )}
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
@@ -248,8 +338,20 @@ export default function SocietySettings() {
                   Are you sure you want to delete this society? This action cannot be undone and will permanently remove all data, members, and events.
                 </p>
                 <div className="flex space-x-3">
-                  <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium">Cancel</button>
-                  <button className="flex-1 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg">Delete Forever</button>
+                  <button 
+                    onClick={() => setShowDeleteConfirm(false)} 
+                    disabled={isDeleting}
+                    className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleDeleteSociety}
+                    disabled={isDeleting}
+                    className="flex-1 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg disabled:opacity-50"
+                  >
+                    {isDeleting ? 'Deleting...' : 'Delete Forever'}
+                  </button>
                 </div>
               </div>
             </div>

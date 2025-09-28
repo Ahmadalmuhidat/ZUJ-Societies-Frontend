@@ -78,12 +78,10 @@ export default function EventsList({ id, events, isEventCompleted, searchTerm, i
 
     try {
       setIsDeleting(true);
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       
       const response = await AxiosClient.delete("/events/delete_event", {
         params: { 
-          event_id: eventToDelete.ID,
-          token: token
+          event_id: eventToDelete.ID
         }
       });
 

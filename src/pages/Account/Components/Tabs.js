@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from "react-toastify";
 import AxiosClient from '../../../config/axios';
+import { useAutoSave } from '../../../hooks/useAutoSave';
 
 export default function Tabs({ profileData, setProfileData }) {
   const [activeTab, setActiveTab] = useState('profile');
@@ -17,6 +18,26 @@ export default function Tabs({ profileData, setProfileData }) {
     showPhone: false,
     allowMessages: true
   });
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  // Initialize state with data from API
+  useEffect(() => {
+    if (profileData) {
+      if (profileData.Notifications) {
+        setNotifications(prev => ({
+          ...prev,
+          ...profileData.Notifications
+        }));
+      }
+      if (profileData.Privacy) {
+        setPrivacy(prev => ({
+          ...prev,
+          ...profileData.Privacy
+        }));
+      }
+      setDataLoaded(true);
+    }
+  }, [profileData]);
 
   const handleProfileChange = (field, value) => {
     setProfileData(prev => prev ? { ...prev, [field]: value } : prev);
@@ -25,7 +46,10 @@ export default function Tabs({ profileData, setProfileData }) {
   const handleProfileSave = async () => {
     const loadingToastId = toast.loading(`Updating profile...`);
     try {
-      if (!profileData) return;
+      if (!profileData) {
+        toast.error(`No profile data available`, { id: loadingToastId });
+        return;
+      }
 
       const response = await AxiosClient.put("/users/update_profile", {
         token: localStorage.getItem("token"),
@@ -40,6 +64,8 @@ export default function Tabs({ profileData, setProfileData }) {
       if (response.status === 200) {
         setIsEditing(false);
         toast.success(`Profile updated successfully`, { id: loadingToastId });
+      } else {
+        toast.error(`Unexpected response status: ${response.status}`, { id: loadingToastId });
       }
     } catch (error) {
       toast.error(`Failed to update profile`, { id: loadingToastId });
@@ -54,6 +80,35 @@ export default function Tabs({ profileData, setProfileData }) {
   const handlePrivacyChange = (key, value) => {
     setPrivacy(prev => ({ ...prev, [key]: value }));
   };
+
+  // Auto-save function for switch settings
+  const saveSwitchSettings = async () => {
+    try {
+      const response = await AxiosClient.put("/users/update_profile", {
+        token: localStorage.getItem("token"),
+        name: profileData?.Name,
+        email: profileData?.Email,
+        phone: profileData?.Phone_Number,
+        bio: profileData?.Bio,
+        notifications,
+        privacy
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Failed to save settings');
+      }
+    } catch (error) {
+      console.error('Auto-save failed:', error);
+      throw error;
+    }
+  };
+
+  // Use auto-save hook for switch settings (only after profile data is loaded)
+  const { isSaving, lastSaved } = useAutoSave(
+    saveSwitchSettings, 
+    dataLoaded ? { notifications, privacy } : null, 
+    1500
+  );
 
   const tabs = [
     { id: 'profile', name: 'Profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
@@ -166,7 +221,29 @@ export default function Tabs({ profileData, setProfileData }) {
 
         {activeTab === 'notifications' && (
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-gray-900">Notification Preferences</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-900">Notification Preferences</h3>
+              <div className="flex items-center text-sm text-gray-500">
+                {isSaving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-1"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Auto-saved
+                    {lastSaved && (
+                      <span className="ml-1 text-xs">
+                        ({lastSaved.toLocaleTimeString()})
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
             
             <div className="space-y-4">
               {Object.entries(notifications).map(([key, value]) => (
@@ -199,7 +276,29 @@ export default function Tabs({ profileData, setProfileData }) {
 
         {activeTab === 'privacy' && (
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-gray-900">Privacy Settings</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-900">Privacy Settings</h3>
+              <div className="flex items-center text-sm text-gray-500">
+                {isSaving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-1"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Auto-saved
+                    {lastSaved && (
+                      <span className="ml-1 text-xs">
+                        ({lastSaved.toLocaleTimeString()})
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
             
             <div className="space-y-4">
               <div>
